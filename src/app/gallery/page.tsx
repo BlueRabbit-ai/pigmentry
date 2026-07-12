@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useQuery, useMutation } from "convex/react";
-import { api } from "@convex/_generated/api";
+import { api } from "@/lib/convex-api";
 import PublicLayout from "@/components/landing/public-layout";
 import { PageHeader } from "@/components/landing/page-header";
 import { GalleryCard } from "@/components/gallery/gallery-card";

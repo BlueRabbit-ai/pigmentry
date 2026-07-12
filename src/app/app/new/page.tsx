@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { useMutation } from "convex/react";
-import { api } from "@convex/_generated/api";
+import { api } from "@/lib/convex-api";
 import { UploadZone } from "@/components/app/upload-zone";
 import { StyleSelector } from "@/components/app/style-selector";
 import { SizeSelector } from "@/components/app/size-selector";
