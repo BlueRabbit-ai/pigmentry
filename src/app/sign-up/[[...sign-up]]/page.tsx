@@ -5,7 +5,10 @@ export default function SignUpPage() {
   return (
     <PublicLayout>
       <div className="container mx-auto px-4 py-24 flex justify-center">
-        <SignUp />
+        <SignUp
+          signInUrl="/sign-in"
+          fallbackRedirectUrl="/app"
+        />
       </div>
     </PublicLayout>
   );
