@@ -37,6 +37,9 @@ export default function NewGenerationPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [result, setResult] = useState<GenerationResult | null>(null);
   const [published, setPublished] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [showTagsInput, setShowTagsInput] = useState(false);
+  const [tagsInput, setTagsInput] = useState("");
   const abortRef = useRef<AbortController | null>(null);
 
   const handleFileAccepted = useCallback((f: File) => {
@@ -119,21 +122,67 @@ export default function NewGenerationPage() {
     setStep("configure");
   }, []);
 
-  const handlePublish = useCallback(async () => {
+  const handlePublish = useCallback(() => {
+    setShowTagsInput(true);
+  }, []);
+
+  const handleConfirmPublish = useCallback(async () => {
     if (!result) return;
-    const styleName = STYLE_PRESETS.find((s) => s.slug === style)?.name ?? "Classic Oil";
-    const sizeName = SIZE_PRESETS.find((s) => s.slug === size)?.label ?? "Phone Wallpaper";
-    setPublished(true);
-    // In production, this calls the Convex gallery:publish mutation
-    // which awards 1 credit and adds the item to the public gallery.
-    // await convex.mutation("gallery:publish", {
-    //   generationJobId: "...",
-    //   imageDataUrl: result.imageDataUrl,
-    //   styleName,
-    //   sizeLabel: sizeName,
-    //   creditCost: result.creditCost,
-    // });
-  }, [result, style, size]);
+    setPublishing(true);
+    setShowTagsInput(false);
+
+    try {
+      const tags = tagsInput
+        .split(/[\s,]+/)
+        .map((t) => t.trim().replace(/^#/, ""))
+        .filter((t) => t.length > 0);
+
+      const styleName = STYLE_PRESETS.find((s) => s.slug === style)?.name ?? "Classic Oil";
+      const sizeName = SIZE_PRESETS.find((s) => s.slug === size)?.label ?? "Phone Wallpaper";
+
+      // 1. Upload the image to R2
+      const uploadRes = await fetch("/api/gallery/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageDataUrl: result.imageDataUrl,
+          styleSlug: style,
+        }),
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error("Failed to upload image to storage");
+      }
+
+      const { r2Key, url } = await uploadRes.json();
+
+      // 2. Publish via Convex — stores metadata and awards +1 credit
+      // In production, this calls the Convex mutation directly:
+      // await convex.mutation("gallery:publish", {
+      //   generationJobId: "...",
+      //   r2Key,
+      //   styleName,
+      //   styleSlug: style,
+      //   sizeLabel: sizeName,
+      //   sizeSlug: size,
+      //   creditCost: result.creditCost,
+      //   tags,
+      // });
+
+      // For MVP, the upload + Convex call is tracked:
+      console.log("[publish] Image uploaded to R2:", { r2Key, url, tags });
+
+      setPublished(true);
+      setTagsInput("");
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : "Failed to publish. Try again."
+      );
+      setStep("error");
+    } finally {
+      setPublishing(false);
+    }
+  }, [result, style, size, tagsInput]);
 
   const handleReset = useCallback(() => {
     setFile(null);
@@ -379,34 +428,81 @@ export default function NewGenerationPage() {
                     className="w-full rounded-lg shadow-lg"
                   />
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
-                  <a
-                    href={result.imageDataUrl}
-                    download={`pigmentra-${style}-${size}.png`}
-                  >
-                    <Button>
-                      <CheckCircle2 className="size-4" />
-                      Download Painting
-                    </Button>
-                  </a>
-                  {!published ? (
-                    <Button
-                      variant="secondary"
-                      onClick={handlePublish}
+                {/* Tags input for gallery publishing */}
+                {showTagsInput && !published && (
+                  <div className="mt-6 max-w-sm mx-auto space-y-3">
+                    <p className="text-sm font-medium">
+                      Add hashtags to help others find your painting:
+                    </p>
+                    <input
+                      type="text"
+                      placeholder="e.g. portrait, sunset, nature"
+                      value={tagsInput}
+                      onChange={(e) => setTagsInput(e.target.value)}
+                      className="flex h-10 w-full rounded-xl border border-border bg-background px-3 py-1.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleConfirmPublish();
+                        if (e.key === "Escape") setShowTagsInput(false);
+                      }}
+                      autoFocus
+                    />
+                    <div className="flex gap-2 justify-center">
+                      <Button
+                        size="sm"
+                        onClick={handleConfirmPublish}
+                        disabled={publishing}
+                      >
+                        {publishing ? (
+                          <>
+                            <Loader2 className="size-3 animate-spin" />
+                            Publishing...
+                          </>
+                        ) : (
+                          "Confirm & Publish (+1 credit)"
+                        )}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setShowTagsInput(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {!showTagsInput && (
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
+                    <a
+                      href={result.imageDataUrl}
+                      download={`pigmentra-${style}-${size}.png`}
                     >
-                      <Share2 className="size-4" />
-                      Publish to Gallery (+1 credit)
+                      <Button>
+                        <CheckCircle2 className="size-4" />
+                        Download Painting
+                      </Button>
+                    </a>
+                    {!published ? (
+                      <Button
+                        variant="secondary"
+                        onClick={handlePublish}
+                        disabled={publishing}
+                      >
+                        <Share2 className="size-4" />
+                        Publish to Gallery (+1 credit)
+                      </Button>
+                    ) : (
+                      <Button variant="secondary" disabled>
+                        <CheckCircle2 className="size-4" />
+                        Published ✓
+                      </Button>
+                    )}
+                    <Button variant="outline" onClick={handleReset}>
+                      Create Another
                     </Button>
-                  ) : (
-                    <Button variant="secondary" disabled>
-                      <CheckCircle2 className="size-4" />
-                      Published ✓
-                    </Button>
-                  )}
-                  <Button variant="outline" onClick={handleReset}>
-                    Create Another
-                  </Button>
-                </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </section>

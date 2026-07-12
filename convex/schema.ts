@@ -148,14 +148,22 @@ export default defineSchema({
     userId: v.id("users"),
     generationJobId: v.id("generationJobs"),
     outputAssetId: v.optional(v.id("outputAssets")),
-    imageDataUrl: v.string(), // base64 data URL for the published image
+    r2Key: v.string(), // R2 object key for the full-resolution image
+    r2PreviewKey: v.optional(v.string()), // R2 object key for the watermarked preview
     styleName: v.string(),
+    styleSlug: v.string(), // "classic-oil" | "luxury-color" | "selective-color" | "desktop-wallpaper"
     sizeLabel: v.string(),
-    creditCost: v.number(),
+    sizeSlug: v.string(), // "phone" | "square" | "laptop" | "custom"
+    creditCost: v.number(), // credits charged for the original generation
+    tags: v.array(v.string()), // user-assigned hashtags e.g. ["portrait", "sunset"]
+    downloadCount: v.number(), // how many times this has been downloaded
+    downloadCreditRewards: v.number(), // how many +1 credit rewards already given (1 per 10 downloads)
     publishedAt: v.number(),
   })
     .index("by_user", ["userId"])
-    .index("by_published", ["publishedAt"]),
+    .index("by_published", ["publishedAt"])
+    .index("by_style", ["styleSlug"])
+    .index("by_downloads", ["downloadCount"]),
 
   // Audit events (security and monitoring)
   auditEvents: defineTable({
