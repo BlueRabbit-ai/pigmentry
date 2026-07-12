@@ -18,6 +18,9 @@ export default function PublicLayout({
             <Link href="/examples" className="hover:text-foreground transition-colors">
               Examples
             </Link>
+            <Link href="/gallery" className="hover:text-foreground transition-colors">
+              Gallery
+            </Link>
             <Link href="/how-it-works" className="hover:text-foreground transition-colors">
               How It Works
             </Link>
@@ -55,6 +58,7 @@ export default function PublicLayout({
               <h3 className="font-semibold text-sm mb-3">Product</h3>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
                 <Link href="/examples" className="hover:text-foreground">Examples</Link>
+                <Link href="/gallery" className="hover:text-foreground">Gallery</Link>
                 <Link href="/styles" className="hover:text-foreground">Styles</Link>
                 <Link href="/sizes" className="hover:text-foreground">Sizes</Link>
                 <Link href="/pricing" className="hover:text-foreground">Pricing</Link>

@@ -143,6 +143,20 @@ export default defineSchema({
   })
     .index("by_user", ["userId"]),
 
+  // Public gallery — user-published generations
+  galleryItems: defineTable({
+    userId: v.id("users"),
+    generationJobId: v.id("generationJobs"),
+    outputAssetId: v.optional(v.id("outputAssets")),
+    imageDataUrl: v.string(), // base64 data URL for the published image
+    styleName: v.string(),
+    sizeLabel: v.string(),
+    creditCost: v.number(),
+    publishedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_published", ["publishedAt"]),
+
   // Audit events (security and monitoring)
   auditEvents: defineTable({
     userId: v.optional(v.id("users")),

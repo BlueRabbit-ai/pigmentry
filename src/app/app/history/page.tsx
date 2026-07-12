@@ -28,57 +28,8 @@ interface Generation {
   previewUrl?: string;
 }
 
-// Placeholder generation data
-const ALL_GENERATIONS: Generation[] = [
-  {
-    id: "gen-1",
-    styleName: "Classic Oil",
-    sizeLabel: "Phone Wallpaper",
-    status: "completed",
-    creditsCharged: 1,
-    createdAt: "Jul 12, 2026 — 2:34 PM",
-  },
-  {
-    id: "gen-2",
-    styleName: "Luxury Color",
-    sizeLabel: "Laptop Wallpaper",
-    status: "completed",
-    creditsCharged: 2,
-    createdAt: "Jul 11, 2026 — 10:15 AM",
-  },
-  {
-    id: "gen-3",
-    styleName: "Selective Color",
-    sizeLabel: "Square",
-    status: "failed",
-    creditsCharged: 1,
-    createdAt: "Jul 10, 2026 — 4:42 PM",
-  },
-  {
-    id: "gen-4",
-    styleName: "Desktop Wallpaper",
-    sizeLabel: "Custom Size",
-    status: "completed",
-    creditsCharged: 2,
-    createdAt: "Jul 9, 2026 — 1:20 PM",
-  },
-  {
-    id: "gen-5",
-    styleName: "Classic Oil",
-    sizeLabel: "Phone Wallpaper",
-    status: "completed",
-    creditsCharged: 1,
-    createdAt: "Jul 8, 2026 — 9:05 AM",
-  },
-  {
-    id: "gen-6",
-    styleName: "Luxury Color",
-    sizeLabel: "Phone Wallpaper",
-    status: "completed",
-    creditsCharged: 1,
-    createdAt: "Jul 7, 2026 — 6:30 PM",
-  },
-];
+// Real generation data will be fetched from Convex in production
+const ALL_GENERATIONS: Generation[] = [];
 
 function filterGenerations(
   gens: Generation[],

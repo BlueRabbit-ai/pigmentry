@@ -39,6 +39,7 @@ export function PricingCard({
     <Card
       className={cn(
         "relative flex flex-col",
+        badge && "overflow-visible",
         highlighted && "ring-2 ring-primary shadow-lg"
       )}
     >

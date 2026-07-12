@@ -20,21 +20,15 @@ export const metadata = {
 const stats = [
   {
     label: "Total Generations",
-    value: "0",
+    value: "—",
     icon: Sparkles,
-    description: "Across all styles",
+    description: "Create your first painting",
   },
   {
-    label: "This Month",
-    value: "0",
-    icon: Sparkles,
-    description: "Paintings created",
-  },
-  {
-    label: "Credits Used",
-    value: "0",
+    label: "Available Credits",
+    value: "—",
     icon: CreditCard,
-    description: "This billing period",
+    description: "Loading...",
   },
 ];
 
@@ -66,33 +60,15 @@ const quickActions = [
   },
 ];
 
-// Placeholder recent generations
-const recentGenerations = [
-  {
-    id: "gen-1",
-    styleName: "Classic Oil",
-    sizeLabel: "Phone Wallpaper",
-    status: "completed" as const,
-    creditsCharged: 1,
-    createdAt: "Jul 12, 2026",
-  },
-  {
-    id: "gen-2",
-    styleName: "Luxury Color",
-    sizeLabel: "Laptop Wallpaper",
-    status: "completed" as const,
-    creditsCharged: 2,
-    createdAt: "Jul 11, 2026",
-  },
-  {
-    id: "gen-3",
-    styleName: "Selective Color",
-    sizeLabel: "Square",
-    status: "failed" as const,
-    creditsCharged: 1,
-    createdAt: "Jul 10, 2026",
-  },
-];
+// Recent generations are fetched from Convex in production
+const recentGenerations: Array<{
+  id: string;
+  styleName: string;
+  sizeLabel: string;
+  status: "completed" | "failed" | "pending" | "processing";
+  creditsCharged: number;
+  createdAt: string;
+}> = [];
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -113,7 +89,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
         {stats.map((stat) => (
           <Card key={stat.label}>
             <CardHeader className="pb-2">

@@ -112,9 +112,9 @@ export function GenerationCard({
         </CardHeader>
         <CardContent className="flex items-center justify-between mt-auto">
           <span className="text-xs text-muted-foreground">{createdAt}</span>
-          {status === "completed" && (
+          {status === "completed" && downloadUrl && (
             <a
-              href={downloadUrl ?? "#"}
+              href={downloadUrl}
               download
               className="inline-flex items-center gap-1 h-6 rounded-[min(var(--radius-md),10px)] px-2 text-xs font-medium border border-border bg-background hover:bg-muted transition-colors"
             >
