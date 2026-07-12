@@ -12,7 +12,6 @@ const STYLE_COLORS: Record<string, string[]> = {
   "classic-oil": ["#8B6914", "#C49A3C", "#D4A76A", "#E8D5B7", "#2C1810"],
   "luxury-color": ["#1A3A5C", "#C41E3A", "#DAA520", "#2E8B57", "#4B0082"],
   "selective-color": ["#8B8682", "#B8B0A8", "#C41E3A", "#2C5F8A", "#D4C5B0"],
-  "desktop-wallpaper": ["#4A7C96", "#8FBFB0", "#C4A882", "#E8D5B7", "#3D5A80"],
 };
 
 const STYLE_USE_CASES: Record<string, string[]> = {
@@ -28,12 +27,6 @@ const STYLE_USE_CASES: Record<string, string[]> = {
     "Fashion shots",
     "Food photography",
     "Artistic portraits",
-  ],
-  "desktop-wallpaper": [
-    "Desktop backgrounds",
-    "Wide landscapes",
-    "Group photos",
-    "Architecture",
   ],
 };
 

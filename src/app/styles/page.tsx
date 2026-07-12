@@ -10,12 +10,12 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Style Presets — Oil Painting Effects & Filters",
   description:
-    "Choose from Classic Oil, Luxury Color, Selective Color, and Desktop Wallpaper styles for your AI-generated painting.",
+    "Choose from Classic Oil, Luxury Color, and Selective Color styles for your AI-generated painting.",
   alternates: { canonical: "/styles" },
   openGraph: {
     title: "Pigmentra Style Presets",
     description:
-      "Choose from Classic Oil, Luxury Color, Selective Color, and Desktop Wallpaper styles for your AI-generated painting.",
+      "Choose from Classic Oil, Luxury Color, and Selective Color styles for your AI-generated painting.",
     url: "/styles",
   },
 };
@@ -24,7 +24,7 @@ const webPageSchema = {
   "@type": "WebPage",
   name: "Pigmentra Style Presets",
   description:
-    "Four distinct oil painting styles — Classic Oil, Luxury Color, Selective Color, and Desktop Wallpaper.",
+    "Three distinct oil painting styles — Classic Oil, Luxury Color, and Selective Color.",
 };
 
 export default function StylesPage() {
@@ -59,7 +59,7 @@ export default function StylesPage() {
               Not Sure Which Style to Choose?
             </h2>
             <p className="mt-4 text-muted-foreground">
-              Try all four styles on the same photo to find your favorite. Each
+              Try all three styles on the same photo to find your favorite. Each
               generation uses the same credit cost regardless of which style you
               pick. See our{" "}
               <Link
@@ -77,7 +77,7 @@ export default function StylesPage() {
       {/* CTA */}
       <section className="container mx-auto px-4 py-20 text-center">
         <h2 className="text-3xl font-bold tracking-tight">
-          Try All Four Styles
+          Try All Three Styles
         </h2>
         <p className="mt-4 text-lg text-muted-foreground">
           Experiment with different looks on the same photo to find your

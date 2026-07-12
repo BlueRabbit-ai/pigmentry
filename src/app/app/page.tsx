@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CreditBalance } from "@/components/app/credit-balance";
 import { GenerationCard } from "@/components/app/generation-card";
 import { ImagePlaceholder } from "@/components/landing/image-placeholder";
 import { Plus, History, CreditCard, Settings, Sparkles } from "lucide-react";
@@ -85,7 +84,6 @@ export default async function DashboardPage() {
             Here&apos;s what&apos;s happening with your paintings.
           </p>
         </div>
-        <CreditBalance balance={0} />
       </div>
 
       {/* Stats Row */}

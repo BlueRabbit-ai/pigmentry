@@ -25,8 +25,6 @@ const STYLE_MODIFIERS: Record<string, string> = {
   "luxury-color": `Intensify the color palette dramatically. Use richer golds, deeper indigos, ruby reds, emerald greens, and sapphire blues. Push the warm/cool contrast further — warm highlights against cool shadows, or vice versa. The overall effect should feel luxurious, cinematic, and emotionally charged, like a high-end gallery piece under dramatic gallery lighting. Make colors feel bold and confident without becoming garish.`,
 
   "selective-color": `Apply selective color treatment: keep the main subject richly saturated and vivid while desaturating the background into muted earth tones and soft grays. The subject should "pop" against a quieter backdrop — like a color focal effect. Background elements should still be painterly but noticeably more subdued, with 30-50% less saturation than the subject. This creates an artistic focal isolation.`,
-
-  "desktop-wallpaper": `Optimize for a desktop wallpaper aesthetic: slightly softer background edges so desktop icons remain legible, a balanced and calm focal area that doesn't compete with UI elements, and an overall composition that works as a serene backdrop. The painting should feel atmospheric and immersive without being distracting. Keep the color palette pleasing but not overly aggressive — think "ambient art" rather than "statement piece".`,
 };
 
 // ---------------------------------------------------------------------------
@@ -65,12 +63,6 @@ export const STYLE_PRESETS = [
     name: "Selective Color",
     description:
       "Muted background with vibrant subject focus for artistic contrast.",
-  },
-  {
-    slug: "desktop-wallpaper",
-    name: "Desktop Wallpaper",
-    description:
-      "Optimized for wide screens with balanced detail and clean edges.",
   },
 ];
 

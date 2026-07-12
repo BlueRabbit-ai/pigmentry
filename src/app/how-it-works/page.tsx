@@ -45,9 +45,9 @@ const steps = [
     title: "Choose Style & Size",
     icon: Palette,
     description:
-      "Pick one of four style presets — Classic Oil, Luxury Color, Selective Color, or Desktop Wallpaper. Then choose your output size: phone, square, laptop, or custom dimensions up to 2K.",
+      "Pick one of three style presets — Classic Oil, Luxury Color, or Selective Color. Then choose your output size: phone, square, laptop, or custom dimensions up to 2K.",
     tips: [
-      "Try all four styles on the same photo to find your favorite",
+      "Try all three styles on the same photo to find your favorite",
       "Phone size is great for personal wallpapers",
       "Laptop size works for desktop backgrounds too",
     ],

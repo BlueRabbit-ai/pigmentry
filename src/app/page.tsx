@@ -90,12 +90,11 @@ const STYLE_PRESETS = [
   { slug: "classic-oil", name: "Classic Oil" },
   { slug: "luxury-color", name: "Luxury Color" },
   { slug: "selective-color", name: "Selective Color" },
-  { slug: "desktop-wallpaper", name: "Desktop Wallpaper" },
 ] as const;
 
 const stats = [
   { value: "10,000+", label: "Paintings Generated" },
-  { value: "4", label: "Style Presets" },
+  { value: "3", label: "Style Presets" },
   { value: "4", label: "Output Sizes" },
   { value: "Under 30s", label: "Average Generation" },
 ];

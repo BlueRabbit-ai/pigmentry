@@ -11,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CreditBalance } from "@/components/app/credit-balance";
 import { ImagePlaceholder } from "@/components/landing/image-placeholder";
 import { Download, Filter } from "lucide-react";
 import Link from "next/link";
@@ -64,7 +63,6 @@ export default function HistoryPage() {
               {counts.completed} completed
             </p>
           </div>
-          <CreditBalance balance={0} />
         </div>
 
         {/* Filters */}

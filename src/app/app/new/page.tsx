@@ -6,7 +6,6 @@ import { api } from "@/lib/convex-api";
 import { UploadZone } from "@/components/app/upload-zone";
 import { StyleSelector } from "@/components/app/style-selector";
 import { SizeSelector } from "@/components/app/size-selector";
-import { CreditBalance } from "@/components/app/credit-balance";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -215,7 +214,6 @@ export default function NewGenerationPage() {
               Upload a photo and choose your style
             </p>
           </div>
-          <CreditBalance balance={0} />
         </div>
 
         {/* Step indicator */}
