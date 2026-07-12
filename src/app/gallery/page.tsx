@@ -108,7 +108,7 @@ export default function GalleryPage() {
                   <img
                     src={item.imageDataUrl}
                     alt={`${item.styleName} oil painting`}
-                    className="w-full aspect-[3:4] object-cover"
+                    className="w-full aspect-3/4 object-cover"
                   />
                   <div className="p-3 flex items-center justify-between">
                     <div>
