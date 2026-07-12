@@ -1,9 +1,20 @@
 /**
- * Re-exports the Convex generated API from a location inside src/
- * so client components can import it via the @/* path alias.
+ * Convex API reference for client components.
  *
- * The generated api.js just exports `anyApi` from "convex/server" —
- * this file re-exports it from the canonical location so there is
- * exactly one import path to maintain if the Convex directory moves.
+ * The generated convex/_generated/api.js exports `anyApi` from "convex/server",
+ * but Turbopack cannot resolve imports pointing at the convex/ directory
+ * (it's excluded from tsconfig). This file provides the same value directly
+ * so client components can import it via the @/* alias.
  */
-export { api } from "../../convex/_generated/api";
+import { anyApi } from "convex/server";
+
+/**
+ * A utility for referencing Convex functions in your app's API.
+ *
+ * Usage:
+ * ```ts
+ * import { api } from "@/lib/convex-api";
+ * const items = useQuery(api.gallery.getPublicItems, { limit: 20 });
+ * ```
+ */
+export const api = anyApi;
