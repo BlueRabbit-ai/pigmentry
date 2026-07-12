@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import { useMutation } from "convex/react";
+import { api } from "@convex/_generated/api";
 import { UploadZone } from "@/components/app/upload-zone";
 import { StyleSelector } from "@/components/app/style-selector";
 import { SizeSelector } from "@/components/app/size-selector";
@@ -41,6 +43,9 @@ export default function NewGenerationPage() {
   const [showTagsInput, setShowTagsInput] = useState(false);
   const [tagsInput, setTagsInput] = useState("");
   const abortRef = useRef<AbortController | null>(null);
+
+  // Convex mutation for gallery publishing
+  const publishToGallery = useMutation(api.gallery.publish);
 
   const handleFileAccepted = useCallback((f: File) => {
     setFile(f);
@@ -151,26 +156,22 @@ export default function NewGenerationPage() {
       });
 
       if (!uploadRes.ok) {
-        throw new Error("Failed to upload image to storage");
+        const errData = await uploadRes.json().catch(() => ({}));
+        throw new Error((errData as any).error ?? "Failed to upload image to storage");
       }
 
-      const { r2Key, url } = await uploadRes.json();
+      const { r2Key } = await uploadRes.json();
 
       // 2. Publish via Convex — stores metadata and awards +1 credit
-      // In production, this calls the Convex mutation directly:
-      // await convex.mutation("gallery:publish", {
-      //   generationJobId: "...",
-      //   r2Key,
-      //   styleName,
-      //   styleSlug: style,
-      //   sizeLabel: sizeName,
-      //   sizeSlug: size,
-      //   creditCost: result.creditCost,
-      //   tags,
-      // });
-
-      // For MVP, the upload + Convex call is tracked:
-      console.log("[publish] Image uploaded to R2:", { r2Key, url, tags });
+      await publishToGallery({
+        r2Key,
+        styleName,
+        styleSlug: style,
+        sizeLabel: sizeName,
+        sizeSlug: size,
+        creditCost: result.creditCost,
+        tags,
+      });
 
       setPublished(true);
       setTagsInput("");
@@ -182,7 +183,7 @@ export default function NewGenerationPage() {
     } finally {
       setPublishing(false);
     }
-  }, [result, style, size, tagsInput]);
+  }, [result, style, size, tagsInput, publishToGallery]);
 
   const handleReset = useCallback(() => {
     setFile(null);

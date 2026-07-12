@@ -146,7 +146,7 @@ export default defineSchema({
   // Public gallery — user-published generations
   galleryItems: defineTable({
     userId: v.id("users"),
-    generationJobId: v.id("generationJobs"),
+    generationJobId: v.optional(v.id("generationJobs")),
     outputAssetId: v.optional(v.id("outputAssets")),
     r2Key: v.string(), // R2 object key for the full-resolution image
     r2PreviewKey: v.optional(v.string()), // R2 object key for the watermarked preview

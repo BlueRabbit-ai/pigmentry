@@ -9,7 +9,7 @@ import { mutation, query, internalMutation } from "./_generated/server";
  */
 export const publish = mutation({
   args: {
-    generationJobId: v.id("generationJobs"),
+    generationJobId: v.optional(v.id("generationJobs")),
     r2Key: v.string(),
     r2PreviewKey: v.optional(v.string()),
     styleName: v.string(),
@@ -30,18 +30,36 @@ export const publish = mutation({
 
     if (!user) throw new Error("User not found");
 
-    // Verify the generation job exists, is completed, and credits were charged
-    const job = await ctx.db.get(args.generationJobId);
-    if (!job) throw new Error("Generation job not found");
-    if (job.userId !== user._id) throw new Error("Not your generation job");
-    if (job.status !== "completed") {
-      throw new Error(
-        "Only completed generations can be published. Failed or pending generations are not eligible."
-      );
+    // If a generation job ID is provided, verify it
+    if (args.generationJobId) {
+      const job = await ctx.db.get(args.generationJobId);
+      if (!job) throw new Error("Generation job not found");
+      if (job.userId !== user._id) throw new Error("Not your generation job");
+      if (job.status !== "completed") {
+        throw new Error(
+          "Only completed generations can be published. Failed or pending generations are not eligible."
+        );
+      }
+      if (job.creditsCharged <= 0) {
+        throw new Error(
+          "Only generations where credits were deducted can be published. Free or failed conversions cannot earn credits."
+        );
+      }
+
+      // Check if already published via this job
+      const existing = await ctx.db
+        .query("galleryItems")
+        .withIndex("by_user", (q) => q.eq("userId", user._id))
+        .filter((q) => q.eq(q.field("generationJobId"), args.generationJobId))
+        .first();
+
+      if (existing) throw new Error("This generation is already published");
     }
-    if (job.creditsCharged <= 0) {
+
+    // Require credits to have been charged (anti-abuse: no free publishing)
+    if (args.creditCost <= 0) {
       throw new Error(
-        "Only generations where credits were deducted can be published. Free or failed conversions cannot earn credits."
+        "Only generations where credits were deducted can be published."
       );
     }
 
@@ -51,20 +69,11 @@ export const publish = mutation({
       .filter((t) => t.length > 0 && t.length <= 30)
       .slice(0, 10); // max 10 tags
 
-    // Check if already published
-    const existing = await ctx.db
-      .query("galleryItems")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
-      .filter((q) => q.eq(q.field("generationJobId"), args.generationJobId))
-      .first();
-
-    if (existing) throw new Error("This generation is already published");
-
     // Insert gallery item
     await ctx.db.insert("galleryItems", {
       userId: user._id,
       generationJobId: args.generationJobId,
-      outputAssetId: job.outputAssetId,
+      outputAssetId: args.generationJobId ? (await ctx.db.get(args.generationJobId))?.outputAssetId : undefined,
       r2Key: args.r2Key,
       r2PreviewKey: args.r2PreviewKey,
       styleName: args.styleName,
